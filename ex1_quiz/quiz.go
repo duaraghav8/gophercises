@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 func parseOptions(defaultFilename, description string) map[string]string {
@@ -49,25 +50,43 @@ func fetchProblems(filename string) [][2]string {
 	return problems
 }
 
-func startQuiz(problems [][2]string) uint {
-	var score uint
+func startQuiz(problems [][2]string, ch chan bool) {
 	reader := bufio.NewReader(os.Stdin)
 
 	for _, qa := range problems {
 		fmt.Print(qa[0], " = ")
 
 		if input, _ := reader.ReadString('\n'); strings.Compare(strings.TrimSpace(input), qa[1]) == 0 {
-			score++
+			ch <- true
 		}
 	}
+}
 
-	return score
+func startTimedQuiz(problems [][2]string, timeout uint) uint {
+	var score uint
+	addScoreCh, timer := make(chan bool), time.NewTimer(time.Duration(timeout)*time.Second)
+
+	defer timer.Stop()
+	go startQuiz(problems, addScoreCh)
+
+	for {
+		select {
+		case <-addScoreCh:
+			score++
+		case <-timer.C:
+			fmt.Println("Time out!")
+			return score
+		}
+	}
 }
 
 func main() {
+	const timeout uint = 30 // seconds
+
 	problemsFilename := parseOptions("problems.csv", "The CSV file containing problems")["file"]
 	problems := fetchProblems(problemsFilename)
-	score := startQuiz(problems)
+	score := startTimedQuiz(problems, timeout)
 
+	fmt.Println("Total number of questions: ", len(problems))
 	fmt.Println("Your score is:", score)
 }
