@@ -18,7 +18,6 @@ var (
 		Long: `Secretstore is a secrets management engine that allows you
 to quickly and securely store and retrieve small pieces of
 data.`,
-		Run: func(cmd *cobra.Command, args []string) {},
 	}
 
 	versionCmd = &cobra.Command{
@@ -30,4 +29,8 @@ data.`,
 	}
 )
 
-var encodingKey string
+var (
+	bufEncodingKey string
+	bufSecretKey   string
+	bufSecretValue string
+)
