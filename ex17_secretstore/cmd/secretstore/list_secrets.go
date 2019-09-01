@@ -19,7 +19,7 @@ func init() {
 }
 
 func listSecrets(cmd *cobra.Command, args []string) {
-	reqUrl := fmt.Sprintf("http://%s:%d/secret", serverBindAddr, serverBindPort)
+	reqUrl := fmt.Sprintf("http://%s:%d/keys", serverBindAddr, serverBindPort)
 
 	res, err := http.Get(reqUrl)
 	if err != nil {

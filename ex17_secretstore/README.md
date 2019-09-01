@@ -51,4 +51,4 @@ Request to this endpoint must include the `X-SECRETSTORE-ENCODING-KEY` header.
 
 3. List all secrets
 
-`GET` `/secret`
+`GET` `/keys`
