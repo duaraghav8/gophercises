@@ -3,7 +3,9 @@ package apiserver
 import (
 	"github.com/duaraghav8/gophercises/ex17_secretstore/pkg/secretstore"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
+	"os"
 )
 
 type APIServer struct {
@@ -11,18 +13,10 @@ type APIServer struct {
 	*mux.Router
 }
 
-func (server *APIServer) HandlerListSecrets(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusAccepted)
-}
-func (server *APIServer) HandlerReadSecret(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusAccepted)
-}
-func (server *APIServer) HandlerWriteSecret(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusAccepted)
-}
+var logger = log.New(os.Stdout, "http: ", log.LstdFlags)
 
-func NewAPIServer(kvstore secretstore.KVStore) (http.Handler, error) {
-	server := APIServer{Datastore: kvstore, Router: mux.NewRouter()}
+func NewAPIServer(kvStore secretstore.KVStore) (http.Handler, error) {
+	server := APIServer{Datastore: kvStore, Router: mux.NewRouter()}
 
 	registerAPIRoutes(server)
 	return server, nil
