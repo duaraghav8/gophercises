@@ -49,7 +49,7 @@ func TestAPIServer_HandlerListSecrets(t *testing.T) {
 
 		storage := secretstore.NewInMemoryKVStore()
 		for _, key := range expected {
-			_ = storage.Put(key, "random-value", "random-encoding-key")
+			_ = storage.Put(key, "random-value")
 		}
 
 		server, _ := NewAPIServer(storage)

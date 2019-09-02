@@ -13,6 +13,8 @@ type APIServer struct {
 	*mux.Router
 }
 
+const EncodingKeyHeader = "X-SECRETSTORE-ENCODING-KEY"
+
 var logger = log.New(os.Stdout, "http: ", log.LstdFlags)
 
 func NewAPIServer(kvStore secretstore.KVStore) (http.Handler, error) {
